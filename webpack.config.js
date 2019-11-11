@@ -2,6 +2,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimazeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 // We'll refer to our source and dist paths frequently, so let's store them here
 const PATH_SOURCE = path.join(__dirname, './src');
@@ -54,7 +57,7 @@ module.exports = env => {
     // we may have multiple entry points.
     // https://webpack.js.org/concepts#entry
     entry: [
-      path.join(PATH_SOURCE, './index.js'),
+      path.join(PATH_SOURCE, './js/index.jsx'),
     ],
 
     // Tell Webpack where to emit the bundles it creates and how to name them.
@@ -71,7 +74,7 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: /\.js$/, // Apply this rule to files ending in .js
+          test: /\.(js|jsx)$/, // Apply this rule to files ending in .js
           exclude: /node_modules/, // Don't apply to files residing in node_modules
           use: { // Use the following loader and options
             loader: 'babel-loader',
@@ -80,7 +83,7 @@ module.exports = env => {
             options: {
               presets: [
                 ['@babel/preset-env', {
-                  debug: true, // Output the targets/plugins used when compiling
+                  debug: false, // Output the targets/plugins used when compiling
 
                   // Configure how @babel/preset-env handles polyfills from core-js.
                   // https://babeljs.io/docs/en/babel-preset-env
@@ -94,15 +97,42 @@ module.exports = env => {
                   // is no need to do it here.)
                   // targets: "",
                 }],
-                
-                 // The react preset includes several plugins that are required to write
+
+                // The react preset includes several plugins that are required to write
                 // a React app. For example, it transforms JSX:
                 // <div> -> React.createElement('div')
                 '@babel/preset-react',
               ],
             },
           }
+        },
+         // Use the following loader and options to create the final CSS file
+        {
+        test: /\.scss$/,
+        use: [
+         {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+        // The file-loader resolves import/require() on a file into a url and emits the file into the output directory.
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: "[name].[hash].[ext]",
+            outputPath: "images",
+            publicPath: './images',
+            useRelativePaths: true
+          }
         }
+      }
       ],
     },
     plugins: [
@@ -116,6 +146,21 @@ module.exports = env => {
       // but the directory itself will be kept.
       // https://github.com/johnagan/clean-webpack-plugin
       new CleanWebpackPlugin(),
+      // This plugin extracts CSS into separate files.
+      //  It creates a CSS file per JS file which contains CSS
+      // https://github.com/webpack-contrib/mini-css-extract-plugin
+      new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : 'css/[name].[hash].css'
+    }),
     ],
+    optimization: {
+    minimizer:
+      [
+      //A Webpack plugin to optimize \ minimize CSS assets.
+      new OptimazeCssAssetsPlugin(), 
+      //This plugin uses terser to minify your JavaScript.
+      new TerserPlugin()
+     ]
+  },
   };
 };
