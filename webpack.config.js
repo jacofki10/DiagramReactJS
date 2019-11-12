@@ -106,33 +106,33 @@ module.exports = env => {
             },
           }
         },
-         // Use the following loader and options to create the final CSS file
+        // Use the following loader and options to create the final CSS file
         {
-        test: /\.scss$/,
-        use: [
-         {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === 'development',
+          test: /\.scss$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: process.env.NODE_ENV === 'development',
+              },
             },
-          },
-          'css-loader',
-          'sass-loader'
-        ]
-      },
+            'css-loader',
+            'sass-loader'
+          ]
+        },
         // The file-loader resolves import/require() on a file into a url and emits the file into the output directory.
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: "[name].[hash].[ext]",
-            outputPath: "images",
-            publicPath: './images',
-            useRelativePaths: true
+        {
+          test: /\.(png|svg|jpg|gif)$/,
+          use: {
+            loader: 'file-loader',
+            options: {
+              name: "[name].[hash].[ext]",
+              outputPath: "images",
+              publicPath: './images',
+              useRelativePaths: true
+            }
           }
         }
-      }
       ],
     },
     plugins: [
@@ -150,17 +150,17 @@ module.exports = env => {
       //  It creates a CSS file per JS file which contains CSS
       // https://github.com/webpack-contrib/mini-css-extract-plugin
       new MiniCssExtractPlugin({
-      filename: isDevelopment ? '[name].css' : 'css/[name].[hash].css'
-    }),
+        filename: isDevelopment ? '[name].css' : 'css/[name].[hash].css'
+      }),
     ],
     optimization: {
-    minimizer:
-      [
-      //A Webpack plugin to optimize \ minimize CSS assets.
-      new OptimazeCssAssetsPlugin(), 
-      //This plugin uses terser to minify your JavaScript.
-      new TerserPlugin()
-     ]
-  },
+      minimizer:
+        [
+          //A Webpack plugin to optimize \ minimize CSS assets.
+          new OptimazeCssAssetsPlugin(),
+          //This plugin uses terser to minify your JavaScript.
+          new TerserPlugin()
+        ]
+    },
   };
 };

@@ -3,25 +3,30 @@ body{
     color: #576071;
     font-size: 18px;
 }
-.container{
+
  /* question Area*/
+ body{
+	background: url('../images/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
 	#question_area{
-		border: solid 4px #E0D8C6;
+		background-color: #FFF;
+		border-radius: 20px;
 		text-align: center;
 		transition: 1s;
 	}
   #q_no{
-    width: 180px;
-    height: 180px;
-		margin: -80px auto 0 auto;
-		background: url('../images/question.png');
-		background-size: 180px 180px;
-    padding-top: 55px;
-    color: #FFF;
+    width: 120px;
+    height: 120px;
+		margin: 0 auto;
+  	background-color: rgb(214, 29, 29);
+	  border-radius: 50%;
+    color: rgb(0, 0, 0);
     display: block;
     text-align: center;
     box-sizing: border-box;
-    font-size: 80px;
+    font-size: 50px;
     font-weight: bold;
 	}
   #question{
@@ -33,18 +38,18 @@ body{
   #q_btn{
     overflow: hidden;
 	}
-	.btn{
+	#q_answer1, #q_answer2, #q_answer3{
 		width: 30%;
-		height: 70px;
+		height: 80px;
 	 font-size: 28px;
+	 border-radius: 40px;
  }
  /* meter Area */
 	#meter_area{
 	  margin: 30px auto;
 	  text-align: center;
-		font-size: 30px;
+		font-size: 20px;
 	}
-}
  #data_area {
    display: none;
  }
